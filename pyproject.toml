@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "weather-api-python"
+version = "0.1.0"
+description = "Small WeatherAPI.com client: fetch current weather by city."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+  "httpx>=0.28",
+]
+
+[project.urls]
+Homepage = "https://github.com/headzoo/weather-api-python"
+Repository = "https://github.com/headzoo/weather-api-python"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7",
+  "ruff>=0.5",
+]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["weather_api_python*"]
