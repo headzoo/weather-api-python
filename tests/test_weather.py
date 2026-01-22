@@ -1,8 +1,7 @@
 import httpx
 import pytest
 
-from weather_api_python.weather import WeatherAPIError, fetch_weather
-
+from weather_api_python.weather import WeatherAPIError, WeatherAPI
 
 def test_fetch_weather_success() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
@@ -26,7 +25,8 @@ def test_fetch_weather_success() -> None:
         )
 
     client = httpx.Client(transport=httpx.MockTransport(handler))
-    data = fetch_weather("Austin", api_key="test", client=client)
+    weather_api = WeatherAPI(api_key="test", client=client)
+    data = weather_api.fetch_weather("Austin")
     assert data["city"] == "Austin"
     assert data["temp_f"] == 68.0
     assert data["condition"] == "Clear"
@@ -36,7 +36,7 @@ def test_fetch_weather_http_error_raises_weather_api_error() -> None:
     def handler(_: httpx.Request) -> httpx.Response:
         return httpx.Response(401, json={"error": {"message": "Invalid API key"}})
 
-    client = httpx.Client(transport=httpx.MockTransport(handler))
+    weather_api = WeatherAPI(api_key="test", client=httpx.Client(transport=httpx.MockTransport(handler)))
     with pytest.raises(WeatherAPIError) as exc:
-        fetch_weather("Austin", api_key="bad", client=client)
+        weather_api.fetch_weather("Austin")
     assert "Invalid API key" in str(exc.value)

@@ -29,8 +29,9 @@ export WEATHERAPI_KEY="..."
 Call the function:
 
 ```python
-from weather_api_python.weather import fetch_weather
+from weather_api_python.weather import WeatherAPI
 
+client = WeatherAPI(api_key="test")
 data = fetch_weather("Austin")
 print(data["temp_f"], data["condition"])
 ```
@@ -46,4 +47,12 @@ try:
     fetch_weather("Austin")
 except WeatherAPIError as e:
     print("Weather error:", e)
+```
+
+## Running Tests
+
+To run the tests, you'll need [pytest](https://docs.pytest.org/), which is included if you install the dev dependencies:
+
+```bash
+pytest -m pytest
 ```
